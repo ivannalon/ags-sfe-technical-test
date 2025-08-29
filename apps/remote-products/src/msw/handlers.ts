@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw';
 import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
 
 const categories = ['home', 'kitchen', 'apparel', 'outdoors', 'office', 'electronics'];
 
@@ -24,6 +24,7 @@ function generateProducts(count: number) {
  */
 export const handlers = [
   http.get('/api/products', async () => {
+    console.log("here")
     const data = generateProducts(2000);
     await new Promise(resolve => setTimeout(resolve, 2000));
     return HttpResponse.json(data);

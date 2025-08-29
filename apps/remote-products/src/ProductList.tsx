@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React, { useMemo, useState } from "react";
 
 type Product = {
@@ -9,16 +11,52 @@ type Product = {
 };
 type Props = { featureFlags?: { showRatings?: boolean } };
 
+const fetchProducts = async (): Promise<Product[]> => {
+  const response = await axios.get("/api/products");
+  return response.data;
+};
+
 export default function ProductList({ featureFlags }: Props) {
-  const [all, setAll] = useState<Product[]>([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState<"asc" | "desc">("asc");
 
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const categories = useMemo(
-    () => ["all", ...Array.from(new Set(all.map((p) => p.category)))],
-    [all]
+    () => ["all", ...Array.from(new Set(products.map((p) => p.category)))],
+    [products]
   );
+
+  const filteredProducts = useMemo(() => {
+    let filtered = products;
+
+    if (query) {
+      filtered = filtered.filter((p) =>
+        p.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    if (category !== "all") {
+      filtered = filtered.filter((p) => p.category === category);
+    }
+
+    return filtered.sort((a, b) =>
+      sort === "asc" ? a.price - b.price : b.price - a.price
+    );
+  }, [products, query, category, sort]);
+
+  if (isLoading) return <p>Loading products…</p>;
+  if (isError) return <p>Error: {(error as Error).message}</p>;
 
   return (
     <div>
