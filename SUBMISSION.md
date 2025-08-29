@@ -1,26 +1,17 @@
-1- Configured shadcn/ui.
+1- Configured shadcn/ui components for consistent UI.
 
-2- Fixed the MSW worker so it only starts in the development environment.
+2- Updated MSW worker to start only in development.
 
-3- Installed Axios and TanStack Query to use useQuery.
+3- Installed Axios and TanStack Query for data fetching (useQuery).
 
-4- Added shadcn components and functions for pagination, search, sorting, category filtering, and reset.
+4- Implemented pagination, search, sorting, category filtering, and reset functionality using shadcn components.
 
-5- Realized that using useQuery is not ideal in a micro frontend context, since the host needs access to the QueryClient.
+5- Determined that useQuery is not ideal in a micro-frontend context because the host needs direct access to the QueryClient.
 
-6- Faced an issue where the host cannot access the MSW HTTP, and I’m currently working on a solution.
+6- Identified and currently resolving an issue where the host cannot access MSW HTTP requests.
 
-I spent too much time implementing TanStack’s useQuery to better manage requests with performance in mind, and ended up losing the time I should have used to export the MSW handles so the mock could also work properly in the host.
+7- Converted table layout to card components for improved visual presentation.
 
-useQuery doesn’t really make sense in this context, since it cannot be managed from both the host and the remote. Instead, I should have created a wrapper to keep the isolation, but that ended up consuming most of my time.
+8- Adjusted MSW configuration to work on the host side as well.
 
-Here are the next steps I would move forward with:
-
-1- Solve the MSW HTTP issue (although this doesn’t happen when working with external APIs).
-
-2- Improve the design.
-
-3- Create unit tests.
-
-4- Implement better error handling.
-
+9- Resolved Tailwind CSS issues by creating a remote bundle so the host can use it plug-and-play.
