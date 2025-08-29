@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import { Button } from "./components/ui/button";
 import "./index.css";
+
+const ProductList = React.lazy(() => import("products/ProductList"));
 
 function App() {
   return (
@@ -17,12 +18,15 @@ function App() {
         <small>Vite • Standalone Module Federation • React 19</small>
       </header>
       <main style={{ marginTop: 16 }}>
-        <h1>
+        <h1
+          style={{ fontSize: 20 }}
+          className="justify-center p-8 w-full text-center"
+        >
           Host Application{" "}
-          <div className="flex min-h-svh flex-col items-center justify-center">
-            <Button>Click me</Button>
-          </div>
         </h1>
+        <Suspense fallback={<p>Loading remote products...</p>}>
+          <ProductList featureFlags={{ showRatings: true }} />
+        </Suspense>
       </main>
     </div>
   );
