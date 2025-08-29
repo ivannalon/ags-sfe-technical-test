@@ -1,4 +1,11 @@
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -7,16 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
+import { Badge } from "./components/ui/badge";
 
 type Product = {
   id: string;
@@ -24,6 +24,7 @@ type Product = {
   price: number;
   category: string;
   rating: number;
+  image: string;
 };
 
 type Props = { featureFlags?: { showRatings?: boolean } };
@@ -143,26 +144,38 @@ export default function ProductList({ featureFlags }: Props) {
         </div>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Price</TableHead>
-            {featureFlags?.showRatings && <TableHead>Rating</TableHead>}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedProducts.map((p) => (
-            <TableRow key={p.id}>
-              <TableCell>{p.name}</TableCell>
-              <TableCell>{p.category}</TableCell>
-              <TableCell>${p.price.toFixed(2)}</TableCell>
-              {featureFlags?.showRatings && <TableCell>{p.rating}</TableCell>}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {paginatedProducts.map((p) => (
+          <Card key={p.id} className="@container/card">
+            <div className="w-full aspect-[4/3] rounded-t-md overflow-hidden bg-gray-100">
+              <img
+                src={p.image}
+                alt={p.name}
+                className="w-full h-full object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <CardHeader>
+              <CardDescription>{p.category}</CardDescription>
+              <CardTitle className="text-xl font-semibold tabular-nums @[250px]/card:text-2xl">
+                ${p.price.toFixed(2)}
+              </CardTitle>
+              {featureFlags?.showRatings && (
+                <Badge
+                  variant="outline"
+                  className="mt-2 flex items-center gap-1"
+                >
+                  {p.rating.toFixed(1)}
+                </Badge>
+              )}
+            </CardHeader>
+            <CardFooter className="flex-col items-start gap-1.5 text-sm">
+              <div className="line-clamp-1 font-medium">{p.name}</div>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
 
       <div className="flex justify-between items-center mt-4">
         <Button
