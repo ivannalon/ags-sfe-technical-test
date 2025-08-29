@@ -12,8 +12,7 @@ export default defineConfig({
       name: "products",
       filename: "remoteEntry.js",
       exposes: {
-        "./ProductList": "./src/ProductList.tsx",
-        './handlers': './src/msw/handlers.ts',
+        "./ProductList": "./src/RemoteEntry.tsx",
       },
       library: { type: "module" },
       shared: {
