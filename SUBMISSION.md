@@ -15,3 +15,5 @@
 8- Adjusted MSW configuration to work on the host side as well.
 
 9- Resolved Tailwind CSS issues by creating a remote bundle so the host can use it plug-and-play.
+
+10- Removed all styling and component dependencies from the host, since it doesn’t make sense to create a remote component that requires installing extra dependencies. Instead, I adopted a bundling strategy to share all styling with the host.
